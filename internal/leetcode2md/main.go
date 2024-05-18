@@ -50,5 +50,12 @@ func NewLeetcode2mdCommand() *cobra.Command {
 func run() error {
 	// 打印所有的配置项及其值
 	slog.Debug("All settings", "settings", viper.AllSettings())
+
+	url := viper.GetString("url")
+
+	titleSlug, solutionSlug := parseUrl(url)
+	fmt.Printf("titleSlug: %v\n", titleSlug)
+	fmt.Printf("solutionSlug: %v\n", solutionSlug)
+
 	return nil
 }
