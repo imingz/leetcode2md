@@ -2,6 +2,7 @@ package leetcode2md
 
 import (
 	"fmt"
+	"leetcode2md/internal/pkg/save2md"
 	"leetcode2md/pkg/version"
 	"log/slog"
 
@@ -51,11 +52,7 @@ func run() error {
 	// 打印所有的配置项及其值
 	slog.Debug("All settings", "settings", viper.AllSettings())
 
-	url := viper.GetString("url")
-
-	titleSlug, solutionSlug := parseUrl(url)
-	fmt.Printf("titleSlug: %v\n", titleSlug)
-	fmt.Printf("solutionSlug: %v\n", solutionSlug)
+	save2md.Save(parseUrl(viper.GetString("url")))
 
 	return nil
 }
