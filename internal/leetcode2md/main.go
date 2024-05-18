@@ -2,6 +2,7 @@ package leetcode2md
 
 import (
 	"fmt"
+	"leetcode2md/pkg/version"
 	"log/slog"
 
 	"github.com/spf13/cobra"
@@ -20,6 +21,7 @@ func NewLeetcode2mdCommand() *cobra.Command {
 		// SilenceUsage: true,
 		// 指定调用 cmd.Execute() 时，执行的 Run 函数，函数执行失败会返回错误信息
 		RunE: func(cmd *cobra.Command, args []string) error {
+			version.PrintAndExitIfRequested()
 			return run()
 		},
 		// 这里设置命令运行时，不需要指定命令行参数
@@ -38,6 +40,8 @@ func NewLeetcode2mdCommand() *cobra.Command {
 	cobra.OnInitialize(initConfig)
 
 	// 在这里您将定义标志和配置设置。
+	// 添加 --version 标志
+	version.AddFlags(cmd.PersistentFlags())
 
 	return cmd
 }

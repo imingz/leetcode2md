@@ -1,7 +1,7 @@
 package main
 
 import (
-	"lc2md/internal/leetcode2md"
+	"leetcode2md/internal/leetcode2md"
 	"log/slog"
 	"os"
 
