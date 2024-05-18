@@ -78,12 +78,16 @@ func (qm *questionMd) parseExamples(str string) {
 					}
 					re_src := regexp.MustCompile(`src="(.*?)"`)
 					src := re_src.FindStringSubmatch(imageMatches[0])[1]
-					imgPath, err := saveImage(src)
-					if err != nil || !viper.GetBool("save.image") {
-						slog.Warn("图片保存失败或者由于设置不保存，使用原链接", "err", err)
-						explains[i] = fmt.Sprintf("![](%v)", src)
+					if viper.GetBool("save.image") {
+						imgPath, err := saveImage(src)
+						if err != nil {
+							slog.Warn("图片保存失败，使用原链接", "err", err)
+							explains[i] = fmt.Sprintf("![](%v)", src)
+						} else {
+							explains[i] = fmt.Sprintf("![](%v)", imgPath)
+						}
 					} else {
-						explains[i] = fmt.Sprintf("![](%v)", imgPath)
+						explains[i] = fmt.Sprintf("![](%v)", src)
 					}
 				}
 			}
