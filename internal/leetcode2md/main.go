@@ -52,7 +52,14 @@ func run() error {
 	// 打印所有的配置项及其值
 	slog.Debug("All settings", "settings", viper.AllSettings())
 
-	save2md.Save(parseUrl(viper.GetString("url")))
+	url := viper.GetString("url")
+
+	if url == "" {
+		fmt.Println("url 为空，请输入")
+		fmt.Scanln(&url)
+	}
+
+	save2md.Save(parseUrl(url))
 
 	return nil
 }
