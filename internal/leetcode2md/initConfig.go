@@ -30,6 +30,7 @@ func initConfig() {
 		viper.SetDefault("dir.md", "./")
 		viper.SetDefault("dir.img", "./assets/")
 		viper.SetDefault("save.image", true)
+		viper.SetDefault("save.filterLang", false)
 	}
 
 	slog.Debug("Using config file", "filename", viper.ConfigFileUsed())
