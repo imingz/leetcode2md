@@ -5,6 +5,7 @@ import (
 	"leetcode2md/internal/pkg/request"
 	"log/slog"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/viper"
 )
@@ -20,7 +21,16 @@ func Save(titleSlug, solutionSlug string) {
 
 	title := saveQuestion(file, titleSlug)
 	defer func() {
-		err := os.Rename(file.Name(), fmt.Sprintf("%s/%s.md", viper.GetString("dir.md"), title))
+		err := file.Close()
+		if err != nil {
+			panic(err)
+		}
+		newFilePath := filepath.Join(viper.GetString("dir.md"), fmt.Sprintf("%s.md", title))
+		err = os.Rename(file.Name(), newFilePath)
+		if err != nil {
+			panic(err)
+		}
+		file, err = os.Open(newFilePath)
 		if err != nil {
 			panic(err)
 		}
@@ -33,7 +43,8 @@ func Save(titleSlug, solutionSlug string) {
 
 func getFile(titleSlug string) *os.File {
 	slog.Info("正在创建文件...\n")
-	file, err := os.Create(fmt.Sprintf("%s/%s.md", viper.GetString("dir.md"), titleSlug))
+	newFilePath := filepath.Join(viper.GetString("dir.md"), fmt.Sprintf("%s.md", titleSlug))
+	file, err := os.Create(newFilePath)
 	if err != nil {
 		slog.Error("创建文件失败")
 		panic(err)

@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"path"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -13,7 +14,7 @@ import (
 func saveImage(imgUrl string) (string, error) {
 	slog.Info("正在保存图片，请稍等")
 	imgName := strings.Join(strings.Split(imgUrl[strings.Index(imgUrl, "/uploads/")+len("/uploads/"):], "/"), "-")
-	imgPath := viper.GetString("dir.img") + imgName
+	imgPath := path.Join(viper.GetString("dir.img"), imgName)
 
 	os.Mkdir(viper.GetString("dir.img"), os.ModePerm)
 
