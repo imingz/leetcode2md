@@ -43,6 +43,10 @@ all: format build
 build: tidy # 编译源码，依赖 tidy 目标自动添加/移除依赖包.
 	@go build -v -ldflags "$(GO_LDFLAGS)" -o $(OUTPUT_DIR)/leetcode2md $(ROOT_DIR)/cmd/leetcode2md/main.go
 
+.PHONY: build-windows
+build-windows: tidy # 编译 Windows 平台可执行文件.
+	@GOOS=windows go build -v -ldflags "$(GO_LDFLAGS)" -o $(OUTPUT_DIR)/leetcode2md.exe $(ROOT_DIR)/cmd/leetcode2md/main.go
+
 .PHONY: format
 format: # 格式化 Go 源码.
 	@gofmt -s -w ./
