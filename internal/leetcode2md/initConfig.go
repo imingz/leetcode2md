@@ -29,6 +29,7 @@ func initConfig() {
 		slog.Warn("使用默认配置, " + err.Error())
 		viper.SetDefault("dir.md", "./")
 		viper.SetDefault("dir.img", "./assets/")
+		viper.SetDefault("save.image", true)
 	}
 
 	slog.Debug("Using config file", "filename", viper.ConfigFileUsed())

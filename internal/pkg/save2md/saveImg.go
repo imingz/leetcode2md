@@ -1,8 +1,8 @@
 package save2md
 
 import (
-	"bufio"
 	"io"
+	"log/slog"
 	"net/http"
 	"os"
 	"strings"
@@ -11,29 +11,24 @@ import (
 )
 
 func saveImage(imgUrl string) (string, error) {
+	slog.Info("正在保存图片，请稍等")
 	imgName := strings.Join(strings.Split(imgUrl[strings.Index(imgUrl, "/uploads/")+len("/uploads/"):], "/"), "-")
 	imgPath := viper.GetString("dir.img") + imgName
 
-	go func() {
-		os.Mkdir(viper.GetString("dir.img"), os.ModePerm)
-	}()
+	os.Mkdir(viper.GetString("dir.img"), os.ModePerm)
 
 	res, err := http.Get(imgUrl)
 	if err != nil {
 		return "", err
 	}
 	defer res.Body.Close()
-	// 获得get请求响应的reader对象
-	reader := bufio.NewReaderSize(res.Body, 32*1024)
 
 	file, err := os.Create(imgPath)
 	if err != nil {
 		return "", err
 	}
 	defer file.Close()
-	// 获得文件的writer对象
-	writer := bufio.NewWriter(file)
 
-	_, err = io.Copy(writer, reader)
+	_, err = io.Copy(file, res.Body)
 	return imgPath, err
 }
