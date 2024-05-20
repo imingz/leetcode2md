@@ -46,6 +46,7 @@ func (qm *questionMd) parseContent(content string) {
 
 // parseExamples 解析示例
 func (qm *questionMd) parseExamples(str string) {
+	str = replaceHtml(str)
 	pre := regexp.MustCompile(`<pre>`)
 	preMatches := pre.FindAllStringSubmatchIndex(str, -1)
 	preEnd := regexp.MustCompile(`</pre>`)
@@ -55,9 +56,9 @@ func (qm *questionMd) parseExamples(str string) {
 		subStr := str[preMatches[i][1]:preEndMatches[i][0]]
 		var example exampleMd
 
-		inputReg := regexp.MustCompile(`<strong>输入[:：\s\n]+</strong>`)
-		outPutReg := regexp.MustCompile(`<strong>输出[:：\s\n]+</strong>`)
-		explainReg := regexp.MustCompile(`<strong>解释[:：\s\n]+</strong>`)
+		inputReg := regexp.MustCompile(`\*\*输入[:：\s\n]+\*\*`)
+		outPutReg := regexp.MustCompile(`\*\*输出[:：\s\n]+\*\*`)
+		explainReg := regexp.MustCompile(`\*\*解释[:：\s\n]+\*\*`)
 
 		inputIndex := inputReg.FindAllStringSubmatchIndex(subStr, -1)[0]
 		outPutIndex := outPutReg.FindAllStringSubmatchIndex(subStr, -1)[0]
@@ -150,6 +151,7 @@ func replaceHtml(str string) (ans string) {
 		"<strong>", "**", "</strong>", "**",
 		// ` <em>{{str}}&nbsp;</em>` --> ` _{{str}}_ `
 		" <em>", " _", "&nbsp;</em>", "_ ",
+		"&quot;", "\"",
 	}
 
 	replacer := strings.NewReplacer(replace...)
